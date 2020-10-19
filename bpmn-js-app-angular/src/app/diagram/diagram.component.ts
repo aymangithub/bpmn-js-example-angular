@@ -14,6 +14,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
+import customControlsModule from '../custom';
 /**
  * You may include a different variant of BpmnJS:
  *
@@ -21,17 +22,26 @@ import { catchError } from 'rxjs/operators';
  *                to navigate them
  * bpmn-modeler - bootstraps a full-fledged BPMN editor
  */
-import * as BpmnJS from 'bpmn-js/dist/bpmn-modeler.production.min.js';
+// import * as BpmnJS from 'bpmn-js/dist/bpmn-modeler.production.min.js';
 
 import { importDiagram } from './rx';
 
 import { throwError } from 'rxjs';
+import * as propertiesPanelModule from 'bpmn-js-properties-panel';
+import * as propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda';
+
+import Modeler from 'bpmn-js/lib/Modeler.js';
+ //import * as camundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda.json';
+
+
+
 
 @Component({
   selector: 'app-diagram',
-  template: `
-    <div #ref class="diagram-container"></div>
-  `,
+  templateUrl: 'diagram-component.html',
+  // template: `
+  //   <div #ref class="diagram-container"></div>
+  // `,
   styles: [
     `
       .diagram-container {
@@ -42,16 +52,30 @@ import { throwError } from 'rxjs';
   ]
 })
 export class DiagramComponent implements AfterContentInit, OnChanges, OnDestroy {
-  private bpmnJS: BpmnJS;
+  private bpmnJS: Modeler;
 
   @ViewChild('ref', { static: true }) private el: ElementRef;
+
+  @ViewChild('jspropertiespanel', { static: true }) private propertiespanelElement: ElementRef;
   @Output() private importDone: EventEmitter<any> = new EventEmitter();
 
   @Input() private url: string;
 
   constructor(private http: HttpClient) {
 
-    this.bpmnJS = new BpmnJS();
+    this.bpmnJS = new Modeler({
+      propertiesPanel: {
+        //parent: '#properties'
+      },
+      additionalModules: [
+        propertiesPanelModule,
+        propertiesProviderModule,
+        customControlsModule
+      ],
+      moddleExtensions: {
+        // camunda: camundaModdleDescriptor
+      }
+    });
 
     this.bpmnJS.on('import.done', ({ error }) => {
       if (!error) {

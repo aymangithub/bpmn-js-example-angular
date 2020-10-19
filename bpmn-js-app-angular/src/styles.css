@@ -1,1 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+.bpmn-icon-service-task{
+    background: #ff000045;
+    border-radius: 10px;
+ 
+}

@@ -20,6 +20,8 @@
     "@angular/platform-browser-dynamic": "^10.0.7",
     "@angular/router": "^10.0.7",
     "bpmn-js": "^7.3.0",
+    "bpmn-js-properties-panel": "^0.37.2",
+    "camunda-bpmn-moddle": "^4.4.0",
     "core-js": "^3.6.5",
     "rxjs": "~6.6.2",
     "tslib": "^2.0.0",
